@@ -61,8 +61,10 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
         for phase in ['train', 'val']:
             if phase == 'train':
                 model.train()  # Set model to training mode
+                print("---Training---")
             else:
                 model.eval()   # Set model to evaluate mode
+                print("---evaling---")
 
             running_loss = 0.0
             running_corrects = 0
@@ -175,7 +177,8 @@ trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 dataloaders_dict = {"train": trainLoader, "val":testLoader}
 # # Create training and validation datasets
-# image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'val']}
+# image_datasets = {x: datasets.ImageFolder(os
+# .path.join(data_dir, x), data_transforms[x]) for x in ['train', 'val']}
 # # Create training and validation dataloaders
 # dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']}
 

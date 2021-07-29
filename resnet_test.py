@@ -173,7 +173,7 @@ train_data = RetinopathyLoader("./data", 'train')
 test_data = RetinopathyLoader("./data", "test")
 trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
-dataloaders_dict = {"train": trainLoader, "test":testLoader}
+dataloaders_dict = {"train": trainLoader, "val":testLoader}
 # # Create training and validation datasets
 # image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'val']}
 # # Create training and validation dataloaders

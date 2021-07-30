@@ -11,6 +11,7 @@ import time
 import os
 import copy
 from RetinopathyLoader import RetinopathyLoader
+import pickle
 print("PyTorch Version: ",torch.__version__)
 print("Torchvision Version: ",torchvision.__version__)
 # Detect if we have a GPU available

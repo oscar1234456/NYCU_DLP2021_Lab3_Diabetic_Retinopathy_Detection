@@ -63,6 +63,11 @@ if __name__ == '__main__':
         test_data = RetinopathyLoader("./data", 'test')
         test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
         print(test_dataloader)
-        test_features, test_labels = next(iter(test_dataloader))
-        print(f"Feature batch shape: {test_features.size()}")
-        print(f"Labels batch shape: {test_labels.size()}")
+        # test_features, test_labels = next(iter(test_dataloader))
+        # print(f"Feature batch shape: {test_features.size()}")
+        # print(f"Labels batch shape: {test_labels.size()}")
+        img, label = test_data[0]
+        plt.figure()
+        img_tran = img.numpy().transpose((1, 2, 0))
+        plt.imshow((img_tran * 255).astype(np.uint8)) #[C,H,W]->[H,W,C]
+        plt.show()

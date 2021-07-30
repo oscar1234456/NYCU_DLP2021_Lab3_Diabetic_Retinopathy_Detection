@@ -18,8 +18,6 @@ print("Torchvision Version: ",torchvision.__version__)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
 ##
-data_dir = "./hymenoptera_data"
-
 model_name = "resnet" # [resnet, alexnet, vgg, squeezenet, densenet, inception]
 
 num_classes = 5
@@ -37,8 +35,6 @@ weight_decay_val = 5e-4
 #   when True we only update the reshaped layer params
 feature_extract = True
 
-
-
 ##
 def set_parameter_requires_grad(model, feature_extracting):
     if feature_extracting:
@@ -46,7 +42,7 @@ def set_parameter_requires_grad(model, feature_extracting):
             param.requires_grad = False
 
 ##
-def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_inception=False):
+def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
     since = time.time()
 
     val_acc_history = []
@@ -80,21 +76,9 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 optimizer.zero_grad()
 
                 # forward
-                # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    # Get model outputs and calculate loss
-                    # Special case for inception because in training it has an auxiliary output. In train
-                    #   mode we calculate the loss by summing the final output and the auxiliary output
-                    #   but in testing we only consider the final output.
-                    if is_inception and phase == 'train':
-                        # From https://discuss.pytorch.org/t/how-to-optimize-inception-model-with-auxiliary-classifiers/7958
-                        outputs, aux_outputs = model(inputs)
-                        loss1 = criterion(outputs, labels)
-                        loss2 = criterion(aux_outputs, labels)
-                        loss = loss1 + 0.4*loss2
-                    else:
-                        outputs = model(inputs)
-                        loss = criterion(outputs, labels)
+                    outputs = model(inputs)
+                    loss = criterion(outputs, labels)
 
                     _, preds = torch.max(outputs, 1)
 
@@ -157,36 +141,12 @@ model_ft = initialize_model(model_name, num_classes, feature_extract, use_pretra
 print(model_ft)
 
 ##
-# Data augmentation and normalization for training
-# Just normalization for validation
-# data_transforms = {
-#     'train': transforms.Compose([
-#         transforms.RandomResizedCrop(input_size),
-#         transforms.RandomHorizontalFlip(),
-#         transforms.ToTensor(),
-#         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-#     ]),
-#     'val': transforms.Compose([
-#         transforms.Resize(input_size),
-#         transforms.CenterCrop(input_size),
-#         transforms.ToTensor(),
-#         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-#     ]),
-# }
-
 print("Initializing Datasets and Dataloaders...")
 train_data = RetinopathyLoader("./data", 'train')
 test_data = RetinopathyLoader("./data", "test")
 trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 dataloaders_dict = {"train": trainLoader, "val":testLoader}
-# # Create training and validation datasets
-# image_datasets = {x: datasets.ImageFolder(os
-# .path.join(data_dir, x), data_transforms[x]) for x in ['train', 'val']}
-# # Create training and validation dataloaders
-# dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']}
-
-
 
 ##
 # Send the model to GPU
@@ -218,7 +178,7 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 criterion = nn.CrossEntropyLoss()
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
-model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs, is_inception=(model_name=="inception"))
+model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs)
 
 ## Save my model
 torch.save(model_ft.state_dict(), 'resnet18_weight1.pth')

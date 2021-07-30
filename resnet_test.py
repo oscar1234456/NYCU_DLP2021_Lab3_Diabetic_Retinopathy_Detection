@@ -171,8 +171,9 @@ else:
             print("\t",name)
 
 # Observe that all parameters are being optimized
-optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val, weight_decay=weight_decay_val)
-
+# optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val, weight_decay=weight_decay_val)
+#close weight_decay 0730 22:26
+optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val)
 ##
 classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn

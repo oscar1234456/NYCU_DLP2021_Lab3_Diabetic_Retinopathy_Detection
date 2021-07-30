@@ -25,7 +25,7 @@ class RetinopathyLoader(Dataset):
                     transforms.RandomResizedCrop(224),
                     transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ]
             ),
             "test":transforms.Compose(
@@ -33,7 +33,7 @@ class RetinopathyLoader(Dataset):
                     transforms.Resize(224),
                     transforms.CenterCrop(224),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ]
             ),
         }
@@ -66,8 +66,9 @@ if __name__ == '__main__':
         # test_features, test_labels = next(iter(test_dataloader))
         # print(f"Feature batch shape: {test_features.size()}")
         # print(f"Labels batch shape: {test_labels.size()}")
-        img, label = test_data[0]
+        img, label = test_data[273]
         plt.figure()
-        img_tran = img.numpy().transpose((1, 2, 0))
-        plt.imshow((img_tran * 255).astype(np.uint8)) #[C,H,W]->[H,W,C]
+        img_tran = img.numpy().transpose((1, 2, 0))  # [C,H,W]->[H,W,C]
+        # plt.imshow((img_tran * 255).astype(np.uint8))
+        plt.imshow(img_tran)
         plt.show()

@@ -125,7 +125,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
     if model_name == "resnet":
         """ Resnet18
         """
-        model_ft = models.resnet18(pretrained=use_pretrained)
+        model_ft = models.resnet50(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
@@ -181,7 +181,7 @@ criterion = nn.CrossEntropyLoss()
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs)
 
 ## Save my model
-torch.save(model_ft.state_dict(), 'resnet18_weight1.pth')
+torch.save(model_ft.state_dict(), 'resnet50_weight1.pth')
 
 ##Save Training & Testing Accuracy Result
 with open('resnet18_Training.pickle', 'wb') as f:

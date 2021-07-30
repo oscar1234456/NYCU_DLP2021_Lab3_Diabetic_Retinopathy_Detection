@@ -30,6 +30,7 @@ class RetinopathyLoader(Dataset):
                     # transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                 ]
             ),
             "test":transforms.Compose(
@@ -38,6 +39,7 @@ class RetinopathyLoader(Dataset):
                     # transforms.CenterCrop(224),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                 ]
             ),
         }
@@ -57,12 +59,12 @@ def getData(mode):
     if mode == "train":
         img = pd.read_csv("./csv/train_img.csv")
         label = pd.read_csv("./csv/train_label.csv")
-        classZeroIndex = label[label["0"]==0].index
-        for index in classZeroIndex:
-            num = random.random()
-            if num >= 0.5:
-                img.drop(index, inplace=True)
-                label.drop(index, inplace=True)
+        # classZeroIndex = label[label["0"]==0].index
+        # for index in classZeroIndex:
+        #     num = random.random()
+        #     if num >= 0.5:
+        #         img.drop(index, inplace=True)
+        #         label.drop(index, inplace=True)
 
         return np.squeeze(img.values), np.squeeze(label.values)
     else:

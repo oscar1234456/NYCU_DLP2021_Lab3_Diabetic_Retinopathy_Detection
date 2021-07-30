@@ -62,7 +62,15 @@ def getData(mode):
         label = pd.read_csv("./csv/test_label.csv")
         return np.squeeze(img.values), np.squeeze(label.values)
 
+def normalWeightGetter():
+    labelData = pd.read_csv("./csv/train_label.csv")
+    # labelDF = pd.DataFrame(labelData)
+    labelCount = labelData.value_counts()
+    normalWeight = 1 - (labelCount / labelCount.sum())
+    return torch.FloatTensor(normalWeight)
+
 if __name__ == '__main__':
+        #Test For DataLoader
         test_data = RetinopathyLoader("./data", 'test')
         train_data = RetinopathyLoader("./data", 'train')
         # test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
@@ -73,6 +81,15 @@ if __name__ == '__main__':
         img, label = train_data[273]
         plt.figure()
         img_tran = img.numpy().transpose((1, 2, 0))  # [C,H,W]->[H,W,C]
-        # plt.imshow((img_tran * 255).astype(np.uint8))
+        # # plt.imshow((img_tran * 255).astype(np.uint8))
         plt.imshow(img_tran)
         plt.show()
+
+        # Test For Data Label:
+        # labelData = pd.read_csv("./csv/train_label.csv")
+        # labelDF = pd.DataFrame(labelData)
+        # # plt.bar([x for x in range(5)], list(labelDF.value_counts()))
+        # # plt.show()
+        # # print(labelDF.value_counts())
+        # labelCount = labelDF.value_counts()
+        # normalWeight = 1-(labelCount/labelCount.sum())

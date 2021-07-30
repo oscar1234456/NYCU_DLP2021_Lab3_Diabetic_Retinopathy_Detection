@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 import time
 import os
 import copy
-from RetinopathyLoader import RetinopathyLoader
+from RetinopathyLoader import RetinopathyLoader,normalWeightGetter
 import pickle
 print("PyTorch Version: ",torch.__version__)
 print("Torchvision Version: ",torchvision.__version__)
@@ -125,7 +125,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
     if model_name == "resnet":
         """ Resnet18
         """
-        model_ft = models.resnet50(pretrained=use_pretrained)
+        model_ft = models.resnet18(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
@@ -174,14 +174,15 @@ else:
 optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val, weight_decay=weight_decay_val)
 
 ##
+classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn
-criterion = nn.CrossEntropyLoss()
+criterion = nn.CrossEntropyLoss(weight=classWeight)
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs)
 
 ## Save my model
-torch.save(model_ft.state_dict(), 'resnet50_weight1.pth')
+torch.save(model_ft.state_dict(), 'resnet18_weight1.pth')
 
 ##Save Training & Testing Accuracy Result
 with open('resnet18_Training.pickle', 'wb') as f:

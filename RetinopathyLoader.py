@@ -9,6 +9,7 @@ from torchvision.io import read_image
 from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+import random
 
 class RetinopathyLoader(Dataset):
     def __init__(self, root, mode):
@@ -24,19 +25,19 @@ class RetinopathyLoader(Dataset):
                 [
                     # transforms.RandomRotation(degrees=(0,180)),
                     # transforms.RandomResizedCrop(224),
-                    # transforms.Resize(224),
+                    transforms.Resize(224),
                     # transforms.CenterCrop(224),
                     # transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ]
             ),
             "test":transforms.Compose(
                 [
-                    # transforms.Resize(224),
+                    transforms.Resize(224),
                     # transforms.CenterCrop(224),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ]
             ),
         }
@@ -56,6 +57,13 @@ def getData(mode):
     if mode == "train":
         img = pd.read_csv("./csv/train_img.csv")
         label = pd.read_csv("./csv/train_label.csv")
+        classZeroIndex = label[label["0"]==0].index
+        for index in classZeroIndex:
+            num = random.random()
+            if num >= 0.5:
+                img.drop(index, inplace=True)
+                label.drop(index, inplace=True)
+
         return np.squeeze(img.values), np.squeeze(label.values)
     else:
         img = pd.read_csv("./csv/test_img.csv")

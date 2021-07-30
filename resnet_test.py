@@ -26,7 +26,7 @@ num_classes = 5
 
 batch_size = 4
 
-num_epochs = 1
+num_epochs = 10
 
 learning_rate = 0.001
 

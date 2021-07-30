@@ -86,10 +86,10 @@ if __name__ == '__main__':
         plt.show()
 
         # Test For Data Label:
-        # labelData = pd.read_csv("./csv/train_label.csv")
+        # labelData = pd.read_csv("./csv/test_label.csv")
         # labelDF = pd.DataFrame(labelData)
-        # # plt.bar([x for x in range(5)], list(labelDF.value_counts()))
-        # # plt.show()
-        # # print(labelDF.value_counts())
+        # plt.bar([x for x in range(5)], list(labelDF.value_counts()))
+        # plt.show()
+        # print(labelDF.value_counts())
         # labelCount = labelDF.value_counts()
         # normalWeight = 1-(labelCount/labelCount.sum())

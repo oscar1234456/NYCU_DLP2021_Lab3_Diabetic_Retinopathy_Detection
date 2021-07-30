@@ -59,12 +59,12 @@ def getData(mode):
     if mode == "train":
         img = pd.read_csv("./csv/train_img.csv")
         label = pd.read_csv("./csv/train_label.csv")
-        classZeroIndex = label[label["0"]==0].index
-        for index in classZeroIndex:
-            num = random.random()
-            if num >= 0.5:
-                img.drop(index, inplace=True)
-                label.drop(index, inplace=True)
+        # classZeroIndex = label[label["0"]==0].index
+        # for index in classZeroIndex:
+        #     num = random.random()
+        #     if num >= 0.5:
+        #         img.drop(index, inplace=True)
+        #         label.drop(index, inplace=True)
 
         return np.squeeze(img.values), np.squeeze(label.values)
     else:

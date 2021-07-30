@@ -153,8 +153,10 @@ print(model_ft)
 # Just normalization for validation
 data_transforms = {
     'train': transforms.Compose([
-        transforms.RandomResizedCrop(input_size),
+        # transforms.RandomResizedCrop(input_size),
+        transforms.Resize([224,224]),
         transforms.RandomHorizontalFlip(),
+
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
@@ -171,9 +173,13 @@ print("Initializing Datasets and Dataloaders...")
 # Create training and validation datasets
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'val']}
 # Create training and validation dataloaders
-dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']}
+dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=0) for x in ['train', 'val']}
 
-
+plt.figure()
+img_tran = image_datasets['val'][0][0].numpy().transpose((1, 2, 0))  # [C,H,W]->[H,W,C]
+# plt.imshow((img_tran * 255).astype(np.uint8))
+plt.imshow(img_tran)
+plt.show()
 
 ##
 # Send the model to GPU

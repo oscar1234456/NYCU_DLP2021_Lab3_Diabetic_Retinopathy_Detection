@@ -19,15 +19,33 @@ class RetinopathyLoader(Dataset):
     def __len__(self):
        return  len(self.img_name)
     def __getitem__(self, index):
-        transform1 = transforms.Compose(
-            [
-                transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
-            ]
-        )
+        data_transform = {
+            "train":transforms.Compose(
+                [
+                    transforms.RandomResizedCrop(224),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ]
+            ),
+            "test":transforms.Compose(
+                [
+                    transforms.Resize(224),
+                    transforms.CenterCrop(224),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ]
+            ),
+        }
+        # transform1 = transforms.Compose(
+        #     [
+        #         transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+        #     ]
+        # )
         img_path = self.root +'/' +self.img_name[index]+'.jpeg'
         image = Image.open(img_path).convert('RGB')
         label = self.label[index]
-        imageConvert = transform1(image)
+        imageConvert = data_transform[self.mode](image)
         # print("load index ", index)
         return imageConvert, label
 

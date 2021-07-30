@@ -49,6 +49,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
     since = time.time()
 
     val_acc_history = []
+    train_acc_history = []
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
@@ -116,6 +117,8 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 best_model_wts = copy.deepcopy(model.state_dict())
             if phase == 'val':
                 val_acc_history.append(epoch_acc)
+            if phase == 'train':
+                train_acc_history.append(epoch_acc)
 
         print()
 
@@ -125,7 +128,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    return model, val_acc_history
+    return model, train_acc_history, val_acc_history
 
 ##
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained=True):
@@ -213,5 +216,14 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 # Setup the loss fxn
 criterion = nn.CrossEntropyLoss()
 
-# Train and evaluate
-model_ft, hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs, is_inception=(model_name=="inception"))
+# Train and evaluate (return model, train_acc_history, test_acc_history)
+model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs, is_inception=(model_name=="inception"))
+
+## Save my model
+torch.save(model_ft.state_dict(), 'resnet18_weight1.pth')
+
+##Save Training & Testing Accuracy Result
+with open('resnet18_Training.pickle', 'wb') as f:
+    pickle.dump(train_hist, f)
+with open('resnet18_Testing.pickle', 'wb') as f:
+    pickle.dump(test_hist, f)

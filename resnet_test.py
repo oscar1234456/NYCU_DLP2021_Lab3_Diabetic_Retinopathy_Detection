@@ -35,6 +35,8 @@ weight_decay_val = 5e-4
 #   when True we only update the reshaped layer params
 feature_extract =False
 
+usePretrained = True
+
 ##
 def set_parameter_requires_grad(model, feature_extracting):
     if feature_extracting:
@@ -68,7 +70,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
             running_corrects = 0
 
             # Iterate over data.
-            for inputs, labels in dataloaders[phase]:
+            for batch, (inputs, labels)in enumerate(dataloaders[phase]):
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -90,7 +92,8 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
-
+                if batch % 2 == 0:
+                    print(f">>>batch [{batch+1}] loss:{running_loss} ")
             epoch_loss = running_loss / len(dataloaders[phase].dataset)
             epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
 
@@ -127,6 +130,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
         """
         model_ft = models.resnet18(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
+        # model_ft.relu = nn.LeakyReLU()
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
         # input_size = 224, ftrs = 512
@@ -144,7 +148,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
 
 # Initialize the model for this run
 # model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
-model_ft = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
+model_ft = initialize_model(model_name, num_classes, feature_extract, use_pretrained=usePretrained)
 # Print the model we just instantiated
 print(model_ft)
 
@@ -179,9 +183,9 @@ else:
             print("\t",name)
 
 # Observe that all parameters are being optimized
-# optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val, weight_decay=weight_decay_val)
+optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val, weight_decay=weight_decay_val)
 #close weight_decay 0730 22:26
-optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val)
+# optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val)
 ##
 # classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn

@@ -26,7 +26,7 @@ batch_size = 4
 
 num_epochs = 10
 
-learning_rate = 0.1
+learning_rate = 0.01
 
 momentum_val = 0.9
 
@@ -193,7 +193,7 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 criterion = nn.CrossEntropyLoss()
 
 ## learning rate scheduler
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft, mode='min', factor=0.1)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft, mode='min', factor=0.1, patience=2)
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,  scheduler=scheduler,num_epochs=num_epochs)

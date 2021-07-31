@@ -107,7 +107,7 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler=None, num_ep
                 val_acc_history.append(epoch_acc)
             if phase == 'train':
                 train_acc_history.append(epoch_acc)
-        if phase == 'train':
+        if phase == 'val':
             scheduler.step(epoch_loss)
         print()
 
@@ -157,8 +157,8 @@ print(model_ft)
 print("Initializing Datasets and Dataloaders...")
 train_data = RetinopathyLoader("./data", 'train')
 test_data = RetinopathyLoader("./data", "test")
-trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=4,pin_memory=True) #, num_workers=4,pin_memory=True
-testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True, num_workers=4,pin_memory=True) #, num_workers=4,pin_memory=True
+trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True) #, num_workers=4,pin_memory=True
+testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True) #, num_workers=4,pin_memory=True
 dataloaders_dict = {"train": trainLoader, "val":testLoader}
 
 ##

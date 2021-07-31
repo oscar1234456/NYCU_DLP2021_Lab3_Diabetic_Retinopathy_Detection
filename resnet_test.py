@@ -44,7 +44,7 @@ def set_parameter_requires_grad(model, feature_extracting):
             param.requires_grad = False
 
 ##
-def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
+def train_model(model, dataloaders, criterion, optimizer, scheduler=None, num_epochs=25):
     since = time.time()
 
     val_acc_history = []
@@ -107,7 +107,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
                 val_acc_history.append(epoch_acc)
             if phase == 'train':
                 train_acc_history.append(epoch_acc)
-
+        scheduler.step(epoch_loss)
         print()
 
     time_elapsed = time.time() - since
@@ -191,8 +191,11 @@ classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn
 criterion = nn.CrossEntropyLoss(weight=classWeight)
 
+## learning rate scheduler
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft, mode='min', factor=0.1)
+
 # Train and evaluate (return model, train_acc_history, test_acc_history)
-model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs)
+model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,  scheduler=scheduler,num_epochs=num_epochs)
 
 ## Save my model
 torch.save(model_ft.state_dict(), 'resnet18_weight1.pth')

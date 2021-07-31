@@ -107,7 +107,8 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler=None, num_ep
                 val_acc_history.append(epoch_acc)
             if phase == 'train':
                 train_acc_history.append(epoch_acc)
-        scheduler.step(epoch_loss)
+        if phase == 'train':
+            scheduler.step(epoch_loss)
         print()
 
     time_elapsed = time.time() - since

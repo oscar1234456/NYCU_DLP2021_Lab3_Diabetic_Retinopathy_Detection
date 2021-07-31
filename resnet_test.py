@@ -22,7 +22,7 @@ model_name = "resnet" # [resnet, alexnet, vgg, squeezenet, densenet, inception]
 
 num_classes = 5
 
-batch_size = 4
+batch_size = 8
 
 num_epochs = 10
 
@@ -144,8 +144,8 @@ print(model_ft)
 print("Initializing Datasets and Dataloaders...")
 train_data = RetinopathyLoader("./data", 'train')
 test_data = RetinopathyLoader("./data", "test")
-trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=4,pin_memory=True)
-testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True, num_workers=4,pin_memory=True)
+trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True) #, num_workers=4,pin_memory=True
+testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True) #, num_workers=4,pin_memory=True
 dataloaders_dict = {"train": trainLoader, "val":testLoader}
 
 ##
@@ -175,9 +175,9 @@ else:
 #close weight_decay 0730 22:26
 optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val)
 ##
-classWeight = normalWeightGetter().to(device)
+# classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn
-criterion = nn.CrossEntropyLoss(weight=classWeight)
+criterion = nn.CrossEntropyLoss()
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs)

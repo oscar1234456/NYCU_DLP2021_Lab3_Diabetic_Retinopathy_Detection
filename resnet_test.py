@@ -92,7 +92,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
-                if batch % 2 == 0:
+                if batch % 100 == 0:
                     print(f">>>batch [{batch+1}] loss:{running_loss} ")
             epoch_loss = running_loss / len(dataloaders[phase].dataset)
             epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
@@ -156,8 +156,8 @@ print(model_ft)
 print("Initializing Datasets and Dataloaders...")
 train_data = RetinopathyLoader("./data", 'train')
 test_data = RetinopathyLoader("./data", "test")
-trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=4,pin_memory=True) #, num_workers=4,pin_memory=True
-testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True, num_workers=4,pin_memory=True) #, num_workers=4,pin_memory=True
+trainLoader = DataLoader(train_data, batch_size=batch_size, shuffle=True) #, num_workers=4,pin_memory=True
+testLoader = DataLoader(test_data, batch_size=batch_size, shuffle=True) #, num_workers=4,pin_memory=True
 dataloaders_dict = {"train": trainLoader, "val":testLoader}
 
 ##

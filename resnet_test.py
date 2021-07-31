@@ -93,7 +93,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
                 if batch % 100 == 0:
-                    print(f">>>batch [{batch+1}] loss:{running_loss} ")
+                    print(f">>>batch [{batch+1}] loss:{loss.item()} ")
             epoch_loss = running_loss / len(dataloaders[phase].dataset)
             epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
 

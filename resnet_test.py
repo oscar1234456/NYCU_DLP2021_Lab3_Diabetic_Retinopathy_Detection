@@ -187,9 +187,9 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 #close weight_decay 0730 22:26
 # optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val)
 ##
-# classWeight = normalWeightGetter().to(device)
+classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn
-criterion = nn.CrossEntropyLoss()
+criterion = nn.CrossEntropyLoss(weight=classWeight)
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, num_epochs=num_epochs)

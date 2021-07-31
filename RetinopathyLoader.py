@@ -30,7 +30,7 @@ class RetinopathyLoader(Dataset):
                     # transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                    # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                 ]
             ),
             "test":transforms.Compose(
@@ -39,7 +39,7 @@ class RetinopathyLoader(Dataset):
                     # transforms.CenterCrop(224),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                    # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                 ]
             ),
         }
@@ -77,6 +77,7 @@ def normalWeightGetter():
     # labelDF = pd.DataFrame(labelData)
     labelCount = labelData.value_counts()
     normalWeight = 1 - (labelCount / labelCount.sum())
+    # normalWeight = len(labelData)/(5*labelCount)
     return torch.FloatTensor(normalWeight)
 
 if __name__ == '__main__':

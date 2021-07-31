@@ -187,9 +187,9 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 #close weight_decay 0730 22:26
 # optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_val)
 ##
-classWeight = normalWeightGetter().to(device)
+# classWeight = normalWeightGetter().to(device)
 # Setup the loss fxn
-criterion = nn.CrossEntropyLoss(weight=classWeight)
+criterion = nn.CrossEntropyLoss()
 
 ## learning rate scheduler
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft, mode='min', factor=0.1)

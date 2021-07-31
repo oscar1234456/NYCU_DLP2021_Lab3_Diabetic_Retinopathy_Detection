@@ -22,7 +22,7 @@ model_name = "resnet18" # [resnet18, resnet50]
 
 num_classes = 5
 
-batch_size = 12
+batch_size = 4
 
 num_epochs = 10
 
@@ -33,7 +33,7 @@ momentum_val = 0.9
 weight_decay_val = 5e-4
 # Flag for feature extracting. When False, we finetune the whole model,
 #   when True we only update the reshaped layer params
-feature_extract = True
+feature_extract =False
 
 ##
 def set_parameter_requires_grad(model, feature_extracting):

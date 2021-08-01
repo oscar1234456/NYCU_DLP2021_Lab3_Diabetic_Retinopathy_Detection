@@ -22,7 +22,7 @@ model_name = "resnet50" # [resnet18, resnet50]
 
 num_classes = 5
 
-batch_size = 256
+batch_size = 200
 
 num_epochs = 20
 

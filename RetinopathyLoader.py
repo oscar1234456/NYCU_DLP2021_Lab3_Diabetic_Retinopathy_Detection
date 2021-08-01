@@ -25,21 +25,25 @@ class RetinopathyLoader(Dataset):
                 [
                     # transforms.RandomRotation(degrees=(0,180)),
                     # transforms.RandomResizedCrop(224),
-                    transforms.Resize(224),
-                    # transforms.CenterCrop(224),
+                    transforms.Resize(260),
+                    transforms.CenterCrop(224),
                     # transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                     # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                    # transforms.Normalize([0.3750, 0.2603, 0.1858], [0.2519, 0.1771, 0.1281])
+                    transforms.Normalize([0.4693, 0.3225, 0.2287], [0.1974, 0.1399, 0.1014])
                 ]
             ),
             "test":transforms.Compose(
                 [
-                    transforms.Resize(224),
-                    # transforms.CenterCrop(224),
+                    transforms.Resize(260),
+                    transforms.CenterCrop(224),
                     transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                     # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                    # transforms.Normalize([0.3750, 0.2603, 0.1858], [0.2519, 0.1771, 0.1281])
+                    transforms.Normalize([0.4693, 0.3225, 0.2287], [0.1974, 0.1399, 0.1014])
                 ]
             ),
         }
@@ -48,6 +52,70 @@ class RetinopathyLoader(Dataset):
         #         transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
         #     ]
         # )
+        img_path = self.root +'/' +self.img_name[index]+'.jpeg'
+        image = Image.open(img_path).convert('RGB')
+        label = self.label[index]
+        imageConvert = data_transform[self.mode](image)
+        # print("load index ", index)
+        return imageConvert, label
+
+class RetinopathyLoaderRes18Test(Dataset):
+    def __init__(self, root, mode):
+        self.root = root
+        self.img_name, self.label = getData(mode)
+        self.mode = mode
+        print(">Found %d images..." % (len(self.img_name)))
+    def __len__(self):
+       return  len(self.img_name)
+    def __getitem__(self, index):
+        data_transform = {
+            "train":transforms.Compose(
+                [
+                    transforms.Resize(224),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ]
+            ),
+            "test":transforms.Compose(
+                [
+                    transforms.Resize(224),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ]
+            ),
+        }
+        img_path = self.root +'/' +self.img_name[index]+'.jpeg'
+        image = Image.open(img_path).convert('RGB')
+        label = self.label[index]
+        imageConvert = data_transform[self.mode](image)
+        # print("load index ", index)
+        return imageConvert, label
+
+class RetinopathyLoaderRes50Test(Dataset):
+    def __init__(self, root, mode):
+        self.root = root
+        self.img_name, self.label = getData(mode)
+        self.mode = mode
+        print(">Found %d images..." % (len(self.img_name)))
+    def __len__(self):
+       return  len(self.img_name)
+    def __getitem__(self, index):
+        data_transform = {
+            "train":transforms.Compose(
+                [
+                    transforms.Resize(224),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                ]
+            ),
+            "test":transforms.Compose(
+                [
+                    transforms.Resize(224),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                ]
+            ),
+        }
         img_path = self.root +'/' +self.img_name[index]+'.jpeg'
         image = Image.open(img_path).convert('RGB')
         label = self.label[index]
@@ -89,7 +157,7 @@ if __name__ == '__main__':
         # test_features, test_labels = next(iter(test_dataloader))
         # print(f"Feature batch shape: {test_features.size()}")
         # print(f"Labels batch shape: {test_labels.size()}")
-        img, label = train_data[273]
+        img, label = test_data[4]
         plt.figure()
         img_tran = img.numpy().transpose((1, 2, 0))  # [C,H,W]->[H,W,C]
         # # plt.imshow((img_tran * 255).astype(np.uint8))

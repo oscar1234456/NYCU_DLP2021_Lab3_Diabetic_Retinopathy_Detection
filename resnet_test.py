@@ -26,11 +26,11 @@ batch_size = 4
 
 num_epochs = 8
 
-learning_rate = 0.001
+learning_rate = 0.005
 
 momentum_val = 0.9
 
-weight_decay_val = 5e-4
+weight_decay_val = 1e-4
 # Flag for feature extracting. When False, we finetune the whole model,
 #   when True we only update the reshaped layer params
 feature_extract =False

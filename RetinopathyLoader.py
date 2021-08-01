@@ -25,31 +25,27 @@ class RetinopathyLoader(Dataset):
                 [
                     # transforms.RandomRotation(degrees=(0,180)),
                     # transforms.RandomResizedCrop(224),
-                    # transforms.Resize(260),
-                    # transforms.CenterCrop(224),
+                    transforms.Resize(260),
+                    transforms.CenterCrop(224),
                     # transforms.RandomHorizontalFlip(),
-                    # transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                     # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                     # transforms.Normalize([0.3750, 0.2603, 0.1858], [0.2519, 0.1771, 0.1281])
                     # transforms.Normalize([0.4693, 0.3225, 0.2287], [0.1974, 0.1399, 0.1014])
-                    #20210801 14:03:
-                    transforms.Resize(224),
-                    transforms.ToTensor(),
+
                 ]
             ),
             "test":transforms.Compose(
                 [
-                    # transforms.Resize(260),
-                    # transforms.CenterCrop(224),
-                    # transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.Resize(260),
+                    transforms.CenterCrop(224),
+                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                     # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                     # transforms.Normalize([0.3750, 0.2603, 0.1858], [0.2519, 0.1771, 0.1281])
                     # transforms.Normalize([0.4693, 0.3225, 0.2287], [0.1974, 0.1399, 0.1014])
-                    # 20210801 14:03:
-                    transforms.Resize(224),
-                    transforms.ToTensor(),
+
                 ]
             ),
         }

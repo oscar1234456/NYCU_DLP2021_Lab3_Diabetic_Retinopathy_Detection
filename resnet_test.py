@@ -26,11 +26,11 @@ model_name = "resnet18" # [resnet18, resnet50] choose the model
 
 num_classes = 5
 
-batch_size = 5
+batch_size = 4
 
 num_epochs = 20
 
-learning_rate = 0.1
+learning_rate = 0.001
 
 momentum_val = 0.9
 

@@ -54,7 +54,7 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=2
     best_acc = 0.0
 
     for epoch in range(num_epochs):
-        print(scheduler.get_lr())
+        print(scheduler.get_last_lr())
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
 

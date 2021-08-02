@@ -1,3 +1,10 @@
+#Author: 310551076 Oscar Chen
+#Course: NYCU DLP 2021 Summer
+#Title: Lab3 Diabetic Retinopathy Detection
+#Date: 2021/07/24
+#Subject: Using ResNet18,50 Pretrained Model to classify Retina pic
+#Email: oscarchen.cs10@nycu.edu.tw
+
 import torch
 import pandas as pd
 import numpy as np

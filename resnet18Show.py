@@ -1,15 +1,25 @@
 import torch
 from torch import nn
-
 from torch.utils.data import DataLoader, TensorDataset
 from RetinopathyLoader import RetinopathyLoaderRes18Test,RetinopathyLoaderRes50Test
 from torchvision import datasets, models, transforms
 from tester import test_model,test_model_ori
+from confusionMatrix import printConfusionMatrix
+import warnings
+
+warnings.filterwarnings('ignore')
+
+
 def set_parameter_requires_grad(model, feature_extracting):
     if feature_extracting:
         for param in model.parameters():
             param.requires_grad = False
+
 if __name__ == '__main__':
+
+    y_pred = list()
+    y_ground = list()
+
     loss_fn = nn.CrossEntropyLoss()
     test_data = RetinopathyLoaderRes18Test("./data", "test")
     testLoader = DataLoader(test_data, batch_size=8, shuffle=True)
@@ -28,11 +38,13 @@ if __name__ == '__main__':
     pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
     model_dict.update(pretrained_dict)
     resnet18Model.load_state_dict(pretrained_dict)
-    # resnet18Model.load_state_dict(torch.load('./testWeight/resnet18_weight1.pth'))
+    # resnet50Model.load_state_dict(torch.load('./testWeight/resnet18_weight1.pth'))
     resnet18Model.to(device)
 
     dataloaders_dict = {"val": testLoader}
     print("ResNet18")
-    test_model(resnet18Model, testLoader, loss_fn, device)
-    # test_model_ori(resnet18Model, dataloaders_dict, criterion=loss_fn, device=device,num_epochs=10)
+    y_pred, y_ground = test_model(resnet18Model, testLoader, loss_fn, device,y_pred,y_ground)
+    # test_model_ori(resnet50Model, dataloaders_dict, criterion=loss_fn, device=device,num_epochs=10)
+
+    printConfusionMatrix(y_pred, y_ground)
 

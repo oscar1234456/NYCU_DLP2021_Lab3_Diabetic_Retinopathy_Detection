@@ -1,7 +1,7 @@
 import torch
 
 
-def test_model(model, testloaders, criterion, device):
+def test_model(model, testloaders, criterion, device, y_pred, y_ground):
     print("-----Testing Start(Testing Set)-----")
 
     model.eval()
@@ -19,11 +19,14 @@ def test_model(model, testloaders, criterion, device):
 
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels.data)
+            y_pred.extend(preds.view(-1).detach().cpu().numpy())  # 將preds預測結果detach出來，並轉成numpy格式
+            y_ground.extend(labels.view(-1).detach().cpu().numpy())
 
     all_loss = running_loss / len(testloaders.dataset)
     all_acc = running_corrects.double() / len(testloaders.dataset)
 
     print('Acc: {:.0f}%'.format(all_acc*100))
+    return y_pred, y_ground
 
 def test_model_ori(model, dataloaders, criterion,device, num_epochs=25):
 

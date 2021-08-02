@@ -18,13 +18,13 @@ print("Torchvision Version: ",torchvision.__version__)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
 ##
-model_name = "resnet50" # [resnet18, resnet50]
+model_name = "resnet18" # [resnet18, resnet50]
 
 num_classes = 5
 
 batch_size = 4
 
-num_epochs = 10
+num_epochs = 5
 
 learning_rate = 0.001
 
@@ -201,10 +201,10 @@ criterion = nn.CrossEntropyLoss()
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,num_epochs=num_epochs)
 
 ## Save my model
-torch.save(model_ft.state_dict(), 'resnet50_nonpre_weight1.pth')
+torch.save(model_ft.state_dict(), 'resnet18_nonpre_weight1.pth')
 
 ##Save Training & Testing Accuracy Result
-with open('resnet50_nonpre_Training.pickle', 'wb') as f:
+with open('resnet18_nonpre_Training.pickle', 'wb') as f:
     pickle.dump(train_hist, f)
-with open('resnet50_nonpre_Testing.pickle', 'wb') as f:
+with open('resnet18_nonpre_Testing.pickle', 'wb') as f:
     pickle.dump(test_hist, f)

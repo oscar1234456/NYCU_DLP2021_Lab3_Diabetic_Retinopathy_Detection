@@ -22,7 +22,7 @@ print("Torchvision Version: ",torchvision.__version__)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using {} device".format(device))
 ## Hyperparameter
-model_name = "resnet18" # [resnet18, resnet50] choose the model
+model_name = "resnet50" # [resnet18, resnet50] choose the model
 
 num_classes = 5
 

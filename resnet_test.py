@@ -62,7 +62,7 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=1
         print('------------')
 
         for phase in ['train', 'val']:
-            size = dataloaders[phase]
+            size = len(dataloaders[phase])
             if phase == 'train':
                 model.train()
                 print("---Training---")

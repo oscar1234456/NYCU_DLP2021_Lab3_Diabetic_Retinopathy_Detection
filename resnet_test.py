@@ -109,7 +109,7 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=1
                 train_acc_history.append(epoch_acc)
 
         print()
-        scheduler.step(epoch_acc) # use for adaptive learning rate control (Experiment Phase)
+        # scheduler.step(epoch_acc) # use for adaptive learning rate control (Experiment Phase)
 
     time_elapsed = time.time() - since #time end
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -176,9 +176,9 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 criterion = nn.CrossEntropyLoss()
 
 ## learning rate scheduler [Experiment Phase]
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft,factor=0.1, patience=2,mode='max',verbose=True)
+# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft,factor=0.1, patience=2,mode='max',verbose=True)
 
-model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,scheduler=scheduler,num_epochs=num_epochs)
+model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,scheduler=None,num_epochs=num_epochs)
 
 ## Save Best model
 torch.save(model_ft.state_dict(), 'resnet18_weight1.pth')

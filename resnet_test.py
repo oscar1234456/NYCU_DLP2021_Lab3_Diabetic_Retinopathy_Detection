@@ -22,11 +22,11 @@ model_name = "resnet50" # [resnet18, resnet50]
 
 num_classes = 5
 
-batch_size = 5
+batch_size = 4
 
-num_epochs = 20
+num_epochs = 10
 
-learning_rate = 0.1
+learning_rate = 0.001
 
 momentum_val = 0.9
 
@@ -35,7 +35,7 @@ weight_decay_val = 5e-4
 #   when True we only update the reshaped layer params
 feature_extract =False
 
-usePretrained = True
+usePretrained = False
 
 ##
 def set_parameter_requires_grad(model, feature_extracting):
@@ -44,7 +44,7 @@ def set_parameter_requires_grad(model, feature_extracting):
             param.requires_grad = False
 
 ##
-def train_model(model, dataloaders, criterion, optimizer, scheduler,num_epochs=25):
+def train_model(model, dataloaders, criterion, optimizer, num_epochs=25):
     since = time.time()
 
     val_acc_history = []
@@ -110,8 +110,8 @@ def train_model(model, dataloaders, criterion, optimizer, scheduler,num_epochs=2
                 train_acc_history.append(epoch_acc)
 
         print()
-        if phase=="val":
-           scheduler.step(epoch_loss)
+        # if phase=="val":
+        #    scheduler.step(epoch_loss)
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -195,16 +195,16 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 criterion = nn.CrossEntropyLoss()
 
 ## learning rate scheduler
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft, mode='min', factor=0.1, patience=2)
+# scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft, mode='min', factor=0.1, patience=2)
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
-model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,scheduler = scheduler,num_epochs=num_epochs)
+model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,num_epochs=num_epochs)
 
 ## Save my model
-torch.save(model_ft.state_dict(), 'resnet50_weight1.pth')
+torch.save(model_ft.state_dict(), 'resnet50_nonpre_weight1.pth')
 
 ##Save Training & Testing Accuracy Result
-with open('resnet50_Training.pickle', 'wb') as f:
+with open('resnet50_nonpre_Training.pickle', 'wb') as f:
     pickle.dump(train_hist, f)
-with open('resnet50_Testing.pickle', 'wb') as f:
+with open('resnet50_nonpre_Testing.pickle', 'wb') as f:
     pickle.dump(test_hist, f)

@@ -62,7 +62,6 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=1
         print('------------')
 
         for phase in ['train', 'val']:
-            size = len(dataloaders[phase])
             if phase == 'train':
                 model.train()
                 print("---Training---")
@@ -74,6 +73,7 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=1
             now_corrects = 0
 
             for batch, (inputs, labels)in enumerate(dataloaders[phase]):
+                size = len(dataloaders[phase])
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 

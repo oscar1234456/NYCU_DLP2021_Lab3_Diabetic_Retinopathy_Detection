@@ -73,7 +73,7 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=1
             now_corrects = 0
 
             for batch, (inputs, labels)in enumerate(dataloaders[phase]):
-                size = len(dataloaders[phase])
+                # size = len(dataloaders[phase])
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -93,8 +93,8 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=1
                 now_corrects += torch.sum(preds == labels.data)
                 if batch % 100 == 0:
                     print(f">>>batch [{batch+1}] loss:{loss.item()} ") #print now batch status
-            epoch_loss = now_loss / size
-            epoch_acc = now_corrects.double() / size
+            epoch_loss = now_loss / len(dataloaders[phase])
+            epoch_acc = now_corrects.double() / len(dataloaders[phase])
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 

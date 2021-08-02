@@ -110,8 +110,7 @@ def train_model(model, dataloaders, criterion, optimizer,scheduler ,num_epochs=2
                 train_acc_history.append(epoch_acc)
 
         print()
-        if phase=="val":
-            scheduler.step(epoch_loss)
+        scheduler.step(epoch_acc)
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
@@ -195,7 +194,7 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 criterion = nn.CrossEntropyLoss()
 
 ## learning rate scheduler
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft,factor=0.1, patience=2)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft,factor=0.1, patience=2,mode='max')
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,scheduler=scheduler,num_epochs=num_epochs)

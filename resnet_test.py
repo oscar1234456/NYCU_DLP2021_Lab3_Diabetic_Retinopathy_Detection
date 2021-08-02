@@ -35,7 +35,7 @@ weight_decay_val = 5e-4
 #   when True we only update the reshaped layer params
 feature_extract =False
 
-usePretrained = False
+usePretrained = True
 
 ##
 def set_parameter_requires_grad(model, feature_extracting):

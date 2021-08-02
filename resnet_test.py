@@ -194,7 +194,7 @@ optimizer_ft = optim.SGD(params_to_update, lr=learning_rate, momentum=momentum_v
 criterion = nn.CrossEntropyLoss()
 
 ## learning rate scheduler
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft,factor=0.1, patience=2,mode='max')
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer_ft,factor=0.1, patience=2,mode='max',verbose=True)
 
 # Train and evaluate (return model, train_acc_history, test_acc_history)
 model_ft, train_hist, test_hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft,scheduler=scheduler,num_epochs=num_epochs)

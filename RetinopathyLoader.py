@@ -1,16 +1,13 @@
-import os
-
 import torch
 import pandas as pd
 import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
-from torchvision.io import read_image
 from torchvision.transforms import transforms
-from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import random
 
+#For Trainning & Val
 class RetinopathyLoader(Dataset):
     def __init__(self, root, mode):
         self.root = root
@@ -23,6 +20,7 @@ class RetinopathyLoader(Dataset):
         data_transform = {
             "train":transforms.Compose(
                 [
+                    # Try Different Transform
                     # transforms.RandomRotation(degrees=(0,180)),
                     # transforms.RandomResizedCrop(224),
                     # transforms.Resize(260),
@@ -31,23 +29,13 @@ class RetinopathyLoader(Dataset):
                     # transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
                     # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                     # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
-                    # transforms.Normalize([0.3750, 0.2603, 0.1858], [0.2519, 0.1771, 0.1281])
                     # transforms.Normalize([0.4693, 0.3225, 0.2287], [0.1974, 0.1399, 0.1014])
-                    #20210801 14:03:
                     transforms.Resize(224),
-                    transforms.ToTensor(),
+                    transforms.ToTensor(),# range [0, 255] -> [0.0,1.0]
                 ]
             ),
             "test":transforms.Compose(
                 [
-                    # transforms.Resize(260),
-                    # transforms.CenterCrop(224),
-                    # transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
-                    # transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                    # transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
-                    # transforms.Normalize([0.3750, 0.2603, 0.1858], [0.2519, 0.1771, 0.1281])
-                    # transforms.Normalize([0.4693, 0.3225, 0.2287], [0.1974, 0.1399, 0.1014])
-                    # 20210801 14:03:
                     transforms.Resize(224),
                     transforms.ToTensor(),
                 ]
@@ -59,6 +47,7 @@ class RetinopathyLoader(Dataset):
         imageConvert = data_transform[self.mode](image)
         return imageConvert, label
 
+#For Demo Show ResNet18
 class RetinopathyLoaderRes18Test(Dataset):
     def __init__(self, root, mode):
         self.root = root
@@ -91,6 +80,7 @@ class RetinopathyLoaderRes18Test(Dataset):
         # print("load index ", index)
         return imageConvert, label
 
+#For Demo Show ResNet50
 class RetinopathyLoaderRes50Test(Dataset):
     def __init__(self, root, mode):
         self.root = root
@@ -104,14 +94,14 @@ class RetinopathyLoaderRes50Test(Dataset):
             "train":transforms.Compose(
                 [
                     transforms.Resize(224),
-                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.ToTensor(),
                     transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                 ]
             ),
             "test":transforms.Compose(
                 [
                     transforms.Resize(224),
-                    transforms.ToTensor(),  # range [0, 255] -> [0.0,1.0]
+                    transforms.ToTensor(),
                     transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                 ]
             ),
@@ -127,6 +117,7 @@ def getData(mode):
     if mode == "train":
         img = pd.read_csv("./csv/train_img.csv")
         label = pd.read_csv("./csv/train_label.csv")
+        # For Imbalanced Data Approach Testing:
         # classZeroIndex = label[label["0"]==0].index
         # for index in classZeroIndex:
         #     num = random.random()
@@ -140,6 +131,7 @@ def getData(mode):
         label = pd.read_csv("./csv/test_label.csv")
         return np.squeeze(img.values), np.squeeze(label.values)
 
+# For Imbalanced Data Approach Testing(Count Weight with each class):
 def normalWeightGetter():
     labelData = pd.read_csv("./csv/train_label.csv")
     # labelDF = pd.DataFrame(labelData)
@@ -152,23 +144,10 @@ if __name__ == '__main__':
         #Test For DataLoader
         test_data = RetinopathyLoader("./data", 'test')
         train_data = RetinopathyLoader("./data", 'train')
-        # test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
-        # print(test_dataloader)
-        # test_features, test_labels = next(iter(test_dataloader))
-        # print(f"Feature batch shape: {test_features.size()}")
-        # print(f"Labels batch shape: {test_labels.size()}")
+
         img, label = test_data[4]
         plt.figure()
         img_tran = img.numpy().transpose((1, 2, 0))  # [C,H,W]->[H,W,C]
-        # # plt.imshow((img_tran * 255).astype(np.uint8))
+        #plt.imshow((img_tran * 255).astype(np.uint8))
         plt.imshow(img_tran)
         plt.show()
-
-        # Test For Data Label:
-        # labelData = pd.read_csv("./csv/test_label.csv")
-        # labelDF = pd.DataFrame(labelData)
-        # plt.bar([x for x in range(5)], list(labelDF.value_counts()))
-        # plt.show()
-        # print(labelDF.value_counts())
-        # labelCount = labelDF.value_counts()
-        # normalWeight = 1-(labelCount/labelCount.sum())
